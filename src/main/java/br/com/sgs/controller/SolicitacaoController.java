@@ -1,5 +1,6 @@
 package br.com.sgs.controller;
 
+import br.com.sgs.dto.Solicitacao.SolicitacaoResponseDTO;
 import br.com.sgs.service.SolicitacaoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class SolicitacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<> visualizar() {
-        return ResponseEntity.ok();
+    public ResponseEntity<SolicitacaoResponseDTO> visualizar(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitacaoService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")

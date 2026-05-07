@@ -1,10 +1,13 @@
 package br.com.sgs.controller;
 
+import br.com.sgs.dto.Solicitante.SolicitanteResponseDTO;
 import br.com.sgs.service.SolicitanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/solicitantes")
@@ -14,8 +17,8 @@ public class SolicitanteController {
     private SolicitanteService solicitanteService;
 
     @GetMapping
-    public ResponseEntity<> listar() {
-        return ResponseEntity.ok();
+    public ResponseEntity<List<SolicitanteResponseDTO>> listar() {
+        return ResponseEntity.ok(solicitanteService.listarSolicitantes());
     }
 
     @PostMapping
@@ -24,8 +27,8 @@ public class SolicitanteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<> visualizar() {
-        return ResponseEntity.ok();
+    public ResponseEntity<SolicitanteResponseDTO> visualizar(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitanteService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")

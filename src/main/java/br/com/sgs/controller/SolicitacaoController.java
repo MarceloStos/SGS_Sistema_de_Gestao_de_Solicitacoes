@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -21,8 +22,13 @@ public class SolicitacaoController {
     private SolicitacaoService solicitacaoService;
 
     @GetMapping
-    public ResponseEntity<> listar(){
-        return ResponseEntity.ok());
+    public ResponseEntity<List<SolicitacaoResponseDTO>> listar(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) String dataInicio,
+            @RequestParam(required = false) String dataFim
+    ){
+        return ResponseEntity.ok(solicitacaoService.listarComFiltros(status, categoriaId, dataInicio, dataFim));
     }
 
     @PostMapping

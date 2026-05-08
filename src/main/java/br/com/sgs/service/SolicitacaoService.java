@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -22,6 +23,12 @@ public class SolicitacaoService {
     @Autowired
     private SolicitacaoRepository solicitacaoRepository;
 
+    public List<SolicitacaoResponseDTO> listarComFiltros(String status, Long categoriaId, String dataInicio, String dataFim) {
+        return solicitacaoRepository.buscarComFiltros(status, categoriaId, dataInicio, dataFim)
+                .stream()
+                .map(SolicitacaoResponseDTO::new)
+                .toList();
+    }
 
     @Transactional
     public SolicitacaoResponseDTO salvar(SolicitacaoRequestDTO dados) {

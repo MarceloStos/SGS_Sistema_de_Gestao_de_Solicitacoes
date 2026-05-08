@@ -66,4 +66,39 @@ public class SolicitacaoService {
 
         return new SolicitacaoResponseDTO(solicitacao);
     }
+
+    @Transactional
+    public SolicitacaoResponseDTO atualizarStatus(Long id, String status) {
+        Solicitacao solicitacao = solicitacaoRepository.buscarPorId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Não foi possível alterar o status: Solicitação não encontrada"));
+
+        System.out.println("DEBUG - Service " + id + " " + status);
+        StatusSolicitacao statusAtual = solicitacao.getStatus();
+        StatusSolicitacao novoStatus = StatusSolicitacao.valueOf(status.toUpperCase());
+
+        validarRegraStatus(statusAtual, novoStatus);
+
+        solicitacaoRepository.atualizarStatus(id, novoStatus.name());
+        solicitacao.setStatus(novoStatus);
+
+        return new SolicitacaoResponseDTO(solicitacao);
+    }
+
+    private void validarRegraStatus(StatusSolicitacao statusAtual, StatusSolicitacao novoStatus) {
+        if (statusAtual == StatusSolicitacao.REJEITADO || statusAtual == StatusSolicitacao.CANCELADO) {
+            throw new IllegalArgumentException("Status final. A solicitação não pode mais ser alterada.");
+        }
+
+        if (statusAtual == StatusSolicitacao.SOLICITADO && novoStatus != StatusSolicitacao.LIBERADO && novoStatus != StatusSolicitacao.REJEITADO) {
+            throw new IllegalArgumentException("De SOLICITADO, só é possível mudar para LIBERADO ou REJEITADO.");
+        }
+
+        if (statusAtual == StatusSolicitacao.LIBERADO && novoStatus != StatusSolicitacao.APROVADO && novoStatus != StatusSolicitacao.REJEITADO) {
+            throw new IllegalArgumentException("De LIBERADO, só é possível mudar para APROVADO ou REJEITADO.");
+        }
+
+        if (statusAtual == StatusSolicitacao.APROVADO && novoStatus != StatusSolicitacao.CANCELADO) {
+            throw new IllegalArgumentException("De APROVADO, só é possível mudar para CANCELADO.");
+        }
+    }
 }

@@ -3,6 +3,7 @@ package br.com.sgs.controller;
 import br.com.sgs.dto.Solicitacao.SolicitacaoRequestDTO;
 import br.com.sgs.dto.Solicitacao.SolicitacaoResponseDTO;
 import br.com.sgs.dto.Solicitacao.SolicitacaoUpdateDTO;
+import br.com.sgs.dto.Status.StatusUpdateDTO;
 import br.com.sgs.service.SolicitacaoService;
 
 import jakarta.validation.Valid;
@@ -45,5 +46,11 @@ public class SolicitacaoController {
     public ResponseEntity<SolicitacaoResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid SolicitacaoUpdateDTO dados) {
         var response = solicitacaoService.atualizar(id, dados);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> atualizarStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dados) {
+        var atualizada = solicitacaoService.atualizarStatus(id, dados.status());
+        return ResponseEntity.ok(atualizada);
     }
 }

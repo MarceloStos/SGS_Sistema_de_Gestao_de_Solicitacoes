@@ -118,4 +118,12 @@ public class SolicitacaoRepository {
                 .executeUpdate();
     }
 
+    public void atualizarStatus(Long id, String status) {
+        String sql = "uPDATE solicitacao SET status = :status WHERE id = :id";
+        entityManager.createNativeQuery(sql)
+                .setParameter("status", status)
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
 }

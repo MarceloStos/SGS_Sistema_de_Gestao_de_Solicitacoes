@@ -35,9 +35,32 @@ public class SolicitanteRepository {
         }
     }
 
-    public void salvar() {
+    public void salvar(Solicitante solicitante) {
+        String sql = "INSERT into solicitante (nome, cpf_cnpj) VALUES (:nome, :cpfCnpj)";
+        entityManager.createNativeQuery(sql)
+                .setParameter("nome", solicitante.getNome())
+                .setParameter("cpfCnpj", solicitante.getCpfCnpj())
+                .executeUpdate();
     }
 
-    public void atualizar() {
+    public void atualizar(Solicitante solicitante) {
+
+        String sql = "UPDATE solicitante set nome = :nome, cpf_cnpj = :cpfCnpj WHERE id = :id";
+        entityManager.createNativeQuery(sql)
+                .setParameter("nome", solicitante.getNome())
+                .setParameter("cpfCnpj", solicitante.getCpfCnpj())
+                .setParameter("id", solicitante.getId())
+                .executeUpdate();
+    }
+
+    public boolean existeCpfCnpj(String cpfCnpj, Long id) {
+
+        String sql = "SELECT COUNT(*) FROM solicitante s WHERE s.cpf_cnpj = :cpfCnpj AND s.id != :id";
+        Object result = entityManager.createNativeQuery(sql)
+                .setParameter("cpfCnpj", cpfCnpj)
+                .setParameter("id", id == null ? -1L : id)
+                .getSingleResult();
+
+        return ((Number) result).longValue() > 0;
     }
 }

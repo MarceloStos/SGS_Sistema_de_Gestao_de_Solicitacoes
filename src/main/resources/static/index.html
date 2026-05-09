@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGS - Sistema de Gestão de Solicitações</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<aside class="sidebar">
+    <h1>SGS</h1>
+    <button class="nav-link active" onclick="app.navigate('solicitacoes-list')">📋 Listar Solicitações</button>
+    <button class="nav-link" onclick="app.novaSolicitacao()">➕ Nova Solicitação</button>
+    <hr style="border-color: rgba(255,255,255,0.1)">
+    <button class="nav-link" onclick="app.navigate('solicitantes-list')">👥 Listar Solicitantes</button>
+    <button class="nav-link" onclick="app.novoSolicitante()">➕ Novo Solicitante</button>
+</aside>
+
+<main class="main-content">
+    <div id="alert-box" class="alert"></div>
+
+    <!-- ===========================SOLICITAÇÕES=================== -->
+    <!-- Listar Solicitações -->
+    <div id="solicitacoes-list" class="section active">
+        <div class="top-bar">
+            <h2>Solicitações de Pagamento</h2>
+            <button class="btn" onclick="app.novaSolicitacao()">Nova Solicitação</button>
+        </div>
+
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div class="filters-row">
+                <select id="filtro-status" class="form-control">
+                    <option value="">Todos os Status</option>
+                    <option value="SOLICITADO">SOLICITADO</option>
+                    <option value="LIBERADO">LIBERADO</option>
+                    <option value="APROVADO">APROVADO</option>
+                    <option value="REJEITADO">REJEITADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                </select>
+                <select id="filtro-categoria" class="form-control"><option value="">Todas as Categorias</option></select>
+                <input type="date" id="filtro-inicio" class="form-control" title="Data Início">
+                <input type="date" id="filtro-fim" class="form-control" title="Data Fim">
+                <button class="btn btn-secondary" onclick="app.loadSolicitacoes()">Filtrar</button>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Solicitante</th>
+                    <th>CPF/CNPJ</th>
+                    <th>Categoria</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="tbody-solicitacoes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Formulário de Solicitação -->
+    <div id="solicitacoes-form" class="section">
+        <div class="top-bar">
+            <h2 id="form-solicitacao-title">Nova Solicitação</h2>
+            <button class="btn btn-secondary" onclick="app.navigate('solicitacoes-list')">Voltar</button>
+        </div>
+
+        <div class="glass-card">
+            <form onsubmit="app.saveSolicitacao(event)">
+                <input type="hidden" id="sol-id">
+                <div class="form-group">
+                    <label>Solicitante</label>
+                    <select id="sol-solicitante" class="form-control" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="sol-categoria" class="form-control" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <input type="text" id="sol-descricao" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Valor (R$)</label>
+                    <input type="number" id="sol-valor" class="form-control" step="0.01" min="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-success">Salvar Solicitação</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Detalhes Solicitação -->
+    <div id="solicitacoes-view" class="section">
+        <div class="top-bar">
+            <h2>Detalhes da Solicitação #<span id="det-id"></span></h2>
+            <button class="btn btn-secondary" onclick="app.navigate('solicitacoes-list')">Voltar</button>
+        </div>
+
+        <div class="glass-card">
+            <div class="details-grid">
+                <div class="details-item"><label>Solicitante</label><p id="det-solicitante"></p></div>
+                <div class="details-item"><label>Categoria</label><p id="det-categoria"></p></div>
+                <div class="details-item"><label>Descrição</label><p id="det-descricao"></p></div>
+                <div class="details-item"><label>Valor</label><p id="det-valor"></p></div>
+                <div class="details-item"><label>Data da Solicitação</label><p id="det-data"></p></div>
+                <div class="details-item"><label>Status Atual</label><p id="det-status"></p></div>
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
+
+            <h3>Atualizar Status</h3>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem; max-width: 400px;">
+                <select id="novo-status" class="form-control">
+                    <option value="LIBERADO">LIBERADO</option>
+                    <option value="APROVADO">APROVADO</option>
+                    <option value="REJEITADO">REJEITADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                </select>
+                <button class="btn btn-success" onclick="app.updateStatus()">Aplicar Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================SOLICITANTES==================-->
+    <!-- Listar Solicitantes -->
+    <div id="solicitantes-list" class="section">
+        <div class="top-bar">
+            <h2>Solicitantes Cadastrados</h2>
+            <button class="btn" onclick="app.novoSolicitante()">Novo Solicitante</button>
+        </div>
+
+        <div class="glass-card">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF/CNPJ</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="tbody-solicitantes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Formulário Solicitante (Cadastro e Atualização) -->
+    <div id="solicitantes-form" class="section">
+        <div class="top-bar">
+            <h2 id="form-solicitante-title">Novo Solicitante</h2>
+            <button class="btn btn-secondary" onclick="app.navigate('solicitantes-list')">Voltar</button>
+        </div>
+
+        <div class="glass-card">
+            <form onsubmit="app.saveSolicitante(event)">
+                <input type="hidden" id="solicitante-id">
+                <div class="form-group">
+                    <label>Nome do Solicitante</label>
+                    <input type="text" id="solicitante-nome" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>CPF ou CNPJ</label>
+                    <input type="text" id="solicitante-documento" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success">Salvar Solicitante</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

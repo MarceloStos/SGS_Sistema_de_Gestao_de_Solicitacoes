@@ -10,13 +10,14 @@ import br.com.sgs.repository.SolicitacaoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class SolicitacaoService {
 
@@ -41,7 +42,7 @@ public class SolicitacaoService {
                 StatusSolicitacao.SOLICITADO
         );
         solicitacaoRepository.salvar(solicitacao);
-
+        log.info("Nova solicitação criada com sucesso. ID: {}", solicitacao.getId());
         return new SolicitacaoResponseDTO(solicitacao);
     }
 

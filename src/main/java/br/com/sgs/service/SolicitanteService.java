@@ -7,12 +7,14 @@ import br.com.sgs.model.Solicitante;
 import br.com.sgs.repository.SolicitanteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
+@Slf4j
 @Service
 public class SolicitanteService {
 
@@ -22,8 +24,8 @@ public class SolicitanteService {
 
     @Transactional
     public SolicitanteResponseDTO salvar(SolicitanteRequestDTO dados) {
-
         if (solicitanteRepository.existeCpfCnpj(dados.cpfCnpj(), null)) {
+            log.warn("Tentativa de cadastro falhou. CPF/CNPJ {} já existe no sistema.", dados.cpfCnpj());
             throw new IllegalArgumentException("Este CPF/CNPJ já está cadastrado no sistema.");
         }
         Solicitante solicitante = new Solicitante(dados.nome(), dados.cpfCnpj());
@@ -40,7 +42,6 @@ public class SolicitanteService {
     }
 
     public SolicitanteResponseDTO buscarPorId(Long id) {
-
         return solicitanteRepository.buscarPorId(id)
                 .map(SolicitanteResponseDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException("Solicitante " + id + " não encontrado"));
@@ -52,6 +53,7 @@ public class SolicitanteService {
                 .orElseThrow(() -> new EntityNotFoundException("Não foi possível atualizar: Solicitante inexistente"));
 
         if (solicitanteRepository.existeCpfCnpj(dados.cpfCnpj(), id)) {
+            log.warn("Tentativa de atualização falhou. CPF/CNPJ {} já existe no sistema.", dados.cpfCnpj());
             throw new IllegalArgumentException("Este CPF/CNPJ já está cadastrado no sistema.");
         }
 

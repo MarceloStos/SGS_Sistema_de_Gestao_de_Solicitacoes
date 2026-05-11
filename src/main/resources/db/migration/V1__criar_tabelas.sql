@@ -14,7 +14,7 @@ CREATE TABLE solicitacao (
     solicitante_id BIGINT NOT NULL,
     categoria_id BIGINT NOT NULL,
     descricao VARCHAR(255) NOT NULL,
-    valor NUMERIC(10, 2) NOT NULL,
+    valor NUMERIC(19, 2) NOT NULL,
     data_solicitacao TIMESTAMP NOT NULL,
     status VARCHAR(50) NOT NULL,
     CONSTRAINT fk_solicitante FOREIGN KEY (solicitante_id) REFERENCES solicitante(id),

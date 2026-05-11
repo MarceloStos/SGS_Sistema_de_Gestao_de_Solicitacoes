@@ -72,7 +72,6 @@ public class SolicitacaoService {
         Solicitacao solicitacao = solicitacaoRepository.buscarPorId(id)
                 .orElseThrow(() -> new EntityNotFoundException("Não foi possível alterar o status: Solicitação não encontrada"));
 
-        System.out.println("DEBUG - Service " + id + " " + status);
         StatusSolicitacao statusAtual = solicitacao.getStatus();
         StatusSolicitacao novoStatus = StatusSolicitacao.valueOf(status.toUpperCase());
 

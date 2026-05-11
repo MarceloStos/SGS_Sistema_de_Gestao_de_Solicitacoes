@@ -73,7 +73,7 @@ public class SolicitacaoRepository {
     public Optional<Solicitacao> buscarPorId (Long id) {
 
         StringBuilder sql = new StringBuilder(
-                "SELECT * FROM solicitacao s " +
+                "SELECT s.* FROM solicitacao s " +
                         "INNER JOIN solicitante sol ON s.solicitante_id = sol.id "  +
                         "INNER JOIN categoria cat ON s.categoria_id = cat.id "  +
                         "WHERE s.id = :id "

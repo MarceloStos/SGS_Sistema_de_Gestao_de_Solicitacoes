@@ -70,7 +70,10 @@ Caso prefira rodar a aplicação nativamente sem o Docker.
 
 1. **Configuração do Banco de Dados:**
    - Crie um banco de dados vazio no seu PostgreSQL chamado sgs_db.
-   - Certifique-se de que as credenciais do seu banco local correspondam às do arquivo src/main/resources/application.properties (Padrão: user postgres, password postgres, porta 5433). Caso contrário, atualize o arquivo com as suas credenciais.
+   - Certifique-se de que as credenciais do seu banco local correspondam às do arquivo src/main/resources/application.properties 
+
+
+(Padrão: USER: postgres, PASSWORD: postgres, PORTA: 5433). Caso contrário, atualize o arquivo com as suas credenciais.
    
 
 2. **Rodar a Aplicação:**

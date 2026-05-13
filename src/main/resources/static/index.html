@@ -40,8 +40,14 @@
                     <option value="CANCELADO">CANCELADO</option>
                 </select>
                 <select id="filtro-categoria" class="form-control"><option value="">Todas as Categorias</option></select>
-                <input type="date" id="filtro-inicio" class="form-control" title="Data Início">
-                <input type="date" id="filtro-fim" class="form-control" title="Data Fim">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="font-size: 0.9rem; color: #ccc;">De:</span>
+                    <input type="date" id="filtro-inicio" class="form-control" title="Data Início">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="font-size: 0.9rem; color: #ccc;">Até:</span>
+                    <input type="date" id="filtro-fim" class="form-control" title="Data Fim">
+                </div>
                 <button class="btn btn-secondary" onclick="app.loadSolicitacoes()">Filtrar</button>
             </div>
         </div>

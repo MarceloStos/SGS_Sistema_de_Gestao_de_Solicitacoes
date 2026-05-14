@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,10 +62,10 @@ public class SolicitacaoRepository {
             query.setParameter("categoriaId", categoriaId);
         }
         if (dataInicio != null && !dataInicio.trim().isEmpty()) {
-            query.setParameter("dataInicio", dataInicio + " 00:00:00");
+            query.setParameter("dataInicio", java.sql.Timestamp.valueOf(dataInicio + " 00:00:00"));
         }
         if (dataFim != null && !dataFim.trim().isEmpty()) {
-            query.setParameter("dataFim", dataFim + " 23:59:59");
+            query.setParameter("dataFim", java.sql.Timestamp.valueOf(dataFim + " 23:59:59"));
         }
 
         return query.getResultList();
@@ -107,14 +108,12 @@ public class SolicitacaoRepository {
 
     public void atualizar(Solicitacao solicitacao) {
 
-        String sql = "UPDATE solicitacao s SET solicitante_id = :solicitanteId, categoria_id = :categoriaId, descricao = :descricao, valor = :valor, data_solicitacao = :data, status = :status WHERE id = :id";
+        String sql = "UPDATE solicitacao s SET categoria_id = :categoriaId, descricao = :descricao, valor = :valor WHERE id = :id";
         entityManager.createNativeQuery(sql)
-                .setParameter("solicitanteId", solicitacao.getSolicitante().getId())
                 .setParameter("categoriaId", solicitacao.getCategoria().getId())
                 .setParameter("descricao", solicitacao.getDescricao())
                 .setParameter("valor", solicitacao.getValor())
-                .setParameter("data", solicitacao.getDataSolicitacao())
-                .setParameter("status", solicitacao.getStatus().name())
+                .setParameter("id", solicitacao.getId())
                 .executeUpdate();
     }
 

@@ -57,11 +57,9 @@ public class SolicitacaoService {
         Solicitacao solicitacao = solicitacaoRepository.buscarPorId(id)
                 .orElseThrow(() -> new EntityNotFoundException("Não foi possível atualizar: Solicitação não encontrada"));
 
-        solicitacao.setSolicitante(dados.solicitante());
         solicitacao.setCategoria(dados.categoria());
         solicitacao.setDescricao(dados.descricao());
         solicitacao.setValor(dados.valor());
-        solicitacao.setDataSolicitacao(dados.dataSolicitacao());
 
         solicitacaoRepository.atualizar(solicitacao);
 

@@ -168,3 +168,8 @@ INSERT INTO solicitacao (solicitante_id, categoria_id, descricao, valor, data_so
 -- Mais uma recente apenas para compor a tabela
 (7, 5, 'Treinamento de segurança do trabalho', 2500.00, '2026-05-12 10:30:00', 'SOLICITADO');
 ```
+
+## 📄 Documentação (Swagger)
+
+👉 Para acessar o Swagger: Abra seu navegador e acesse http://localhost:8080/swagger-ui/index.html
+
